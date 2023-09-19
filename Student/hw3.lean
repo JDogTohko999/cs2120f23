@@ -29,7 +29,8 @@ a result.
 -/
 
 -- Answer below
-
+def funkom {α β γ : Type} (f : β → γ) (g : α → β) : α → γ :=
+fun x => f (g x)
 
 /-! 
 ## Problem #2
@@ -39,8 +40,8 @@ Define a function of the following polymorphic type:
 -/
 
 -- Answer below
-
-
+def mkop {α β : Type} (a : α) (b : β) : α × β :=
+(a,b)
 
 /-! 
 ## Problem #3
@@ -50,7 +51,8 @@ Define a function of the following polymorphic type:
 -/
 
 -- Answer below
-
+def op_left {α β : Type} : α × β → α
+| (a, _) => a
 
 
 
@@ -62,7 +64,8 @@ Define a function of the following polymorphic type:
 -/
 
 -- Answer below
-
+def op_right {α β : Type} : α × β → β
+| (_, b) => b
 
 
 /-! 
@@ -98,6 +101,50 @@ from each weekday is *money* and the reward from a weekend
 day is *health*.
 -/
 
+inductive Day : Type
+| Sunday 
+| Monday 
+| Tuesday 
+| Wednesday 
+| Thursday 
+| Friday 
+| Saturday 
+
+inductive Kind : Type
+| Work 
+| Play 
+
+def day2kind (x: Day) : Kind := match x with
+| Day.Sunday    => Kind.Play
+| Day.Monday    => Kind.Work
+| Day.Tuesday   => Kind.Work
+| Day.Wednesday => Kind.Work
+| Day.Thursday  => Kind.Work
+| Day.Friday    => Kind.Work
+| Day.Saturday  => Kind.Play
+
+inductive Reward : Type
+| Money 
+| Health 
+
+def kind2reward : Kind → Reward
+| Kind.Work => Reward.Money
+| Kind.Play => Reward.Health
+
+def day2reward : Day → Reward :=
+funkom kind2reward day2kind
+
+-- Test case for each day
+#reduce day2reward Day.Sunday    -- Health
+#reduce day2reward Day.Monday    -- Money
+#reduce day2reward Day.Tuesday   -- Money
+#reduce day2reward Day.Wednesday -- Money
+#reduce day2reward Day.Thursday  -- Money
+#reduce day2reward Day.Friday    -- Money
+#reduce day2reward Day.Saturday  -- Health
+
+
+
 /-!
 ## Problem #6
 
@@ -113,7 +160,10 @@ Consider the outputs of the following #check commands.
 Is × left associative or right associative? Briefly explain
 how you reached your answer.
 
-Answer here: 
+Answer here: It is left associative. I can tell because the output of the second statement
+clearly multiplies the product of the second and third nat by the first nat which produces 
+a different output from statements 1 and 3. The first statement is essentially the 
+third statement due to the left associative property.
 
 ### B.
 Define a function, *triple*, of the following type:
@@ -121,6 +171,9 @@ Define a function, *triple*, of the following type:
 -/
 
 -- Here:
+def triple {α β γ : Type} (a : α) (b : β) (c : γ) : α×β×γ :=
+(a,b,c)
+
 
 /-!
 ### C.
@@ -131,6 +184,15 @@ second, or third elements.
 -/
 
 -- Here:
+def first {α β γ : Type} : α × β × γ → α
+| (α, _, _) => α
+
+def second {α β γ : Type} : α × β × γ → β
+| (_, β, _) => β
+
+def third {α β γ : Type} : α × β × γ → γ
+| (_, _, γ) => γ
+
 
 /-!
 ### D.
@@ -141,6 +203,10 @@ element of that triple.
 -/
 
 -- Here:
+#eval first (false,"test",29) -- false
+#eval second (false,"test",29) -- "test"
+#eval third (false,"test",29) -- 29
+
 
 /-!
 ### E.
@@ -148,6 +214,11 @@ Use #check to check the type of a term. that you make
 up, of type (Nat × String) × Bool. The challenge here
 is to write a term of that type. 
 -/
+
+
+#check ((29, "test"), false) -- (Nat × String) × Bool
+--same thing as this because left associative
+#check (29, "test", false) -- Nat × String × Bool
 
 
 
