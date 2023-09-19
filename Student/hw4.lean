@@ -211,8 +211,8 @@ a *γ* value.
  -/
 
  def prod_dist_sum {α β γ : Type} : α × (β ⊕ γ) → (α × β) ⊕ (α × γ)
-| (a, Sum.inl b) => Sum.inl(a, b)
-| (a, Sum.inr c) => Sum.inr(a, c)
+ |(a, Sum.inl b) => Sum.inl (a, b)
+ |(a, Sum.inr c) => Sum.inr (a, c)
 
 /-!
 Does the preceding principle work in reverse? In other 
@@ -225,9 +225,9 @@ any value of type *(α × β) ⊕ (α × γ)* into one of type
 -/
 
 -- Here:
-def prod_dist_sum_r {α β γ : Type} : (α × β) ⊕ (a × γ) → α × (β ⊕ γ)
+def prod_dist_sum_r {α β γ : Type} : (α × β) ⊕ (α × γ) → α × (β ⊕ γ)
 | Sum.inl (a, b) => (a, Sum.inl b)
-| Sum.inr (a, c) => (a, Sum.inl c)
+| Sum.inr (a, c) => (a, Sum.inr c)
 /-!
 In the forward (first) direction we can say that products
 distribute over sums, just as, say, *4 * (2 + 3)* is the
@@ -249,10 +249,10 @@ type *wet*.
 -/
 
 -- Here
-def its_wet (a:rain ⊕ spinkler)(rainWet: rain → wet)(sprinklerWet : sprinkler): sprinkler:=
+def its_wet (a:rain ⊕ sprinkler)(rainWet: rain → wet)(sprinklerWet : sprinkler→wet): wet:=
 match a with
 | Sum.inl r => rainWet r
-| Sum.inr r => sprinklerWet s
+| Sum.inr s => sprinklerWet s
 /-!
 Now rewrite your function using the type names,
 *α, γ,* and *β* instead of *rain, sprinkler* and
