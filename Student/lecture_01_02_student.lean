@@ -436,19 +436,3 @@ plausible, interpretation of the snack policy that the Dad
 was communicating to his daughter? (You can have one or none
 but not both)?
 -/
-
-
-def id_nat : Nat → Nat
-| n => n
-
-def id_bool : Bool → Bool
-| true => true
-| false => false
-
-def id_bool' (b: Bool) : Bool := b
-
-def id_string: String → String
-| s => s
-
-def polymorphic_id : (T : Type) := T → T
-| t, v => v
